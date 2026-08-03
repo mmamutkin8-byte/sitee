@@ -1,0 +1,2187 @@
+<!doctype html>
+<html lang="ru" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FABRIKA // Системы обработки заявок и телефонии для заводов</title>
+    <meta name="description" content="Премиальная система квалификации клиентов, авто-обработки заявок и 24/7 телефонии для производственных предприятий." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.2.6",
+        "react-dom": "https://esm.sh/react-dom@19.2.6",
+        "react-dom/client": "https://esm.sh/react-dom@19.2.6/client",
+        "framer-motion": "https://esm.sh/framer-motion@12.23.24?external=react,react-dom",
+        "lucide-react": "https://esm.sh/lucide-react@0.469.0?external=react"
+      }
+    }
+    </script>
+
+    <style>
+      :root {
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: #FAFAFA;
+        color: #111111;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .font-mono { font-family: var(--font-mono); }
+
+      /* Custom Liquid Glass Material Styles */
+      .liquid-glass {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(17, 17, 17, 0.08);
+        box-shadow:
+          0 10px 30px -10px rgba(17, 17, 17, 0.05),
+          0 1px 2px 0 rgba(17, 17, 17, 0.04),
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
+          inset 0 -1px 2px 0 rgba(17, 17, 17, 0.03);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .liquid-glass:hover {
+        background: rgba(255, 255, 255, 0.88);
+        border-color: rgba(17, 17, 17, 0.16);
+        box-shadow:
+          0 20px 40px -15px rgba(17, 17, 17, 0.08),
+          0 2px 4px 0 rgba(17, 17, 17, 0.06),
+          inset 0 1.5px 2px 0 rgba(255, 255, 255, 1),
+          inset 0 -1px 2px 0 rgba(17, 17, 17, 0.05);
+      }
+
+      .liquid-glass-dark {
+        background: rgba(17, 17, 17, 0.92);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #FAFAFA;
+        box-shadow:
+          0 20px 40px -10px rgba(0, 0, 0, 0.25),
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+          inset 0 -1px 1px 0 rgba(0, 0, 0, 0.5);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .liquid-glass-dark:hover {
+        background: rgba(17, 17, 17, 0.96);
+        border-color: rgba(255, 255, 255, 0.25);
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.35),
+          inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.3);
+      }
+
+      .liquid-glass-subtle {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(17, 17, 17, 0.05);
+        box-shadow:
+          0 4px 16px 0 rgba(17, 17, 17, 0.02),
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      .glass-icon-container {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.6) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(17, 17, 17, 0.1);
+        box-shadow:
+          0 4px 12px rgba(17, 17, 17, 0.05),
+          inset 0 1px 1px rgba(255, 255, 255, 0.9),
+          inset 0 -1px 2px rgba(17, 17, 17, 0.05);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .glass-icon-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 45%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+        pointer-events: none;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+      }
+
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: #FAFAFA; }
+      ::-webkit-scrollbar-thumb { background: rgba(17, 17, 17, 0.15); border-radius: 9999px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(17, 17, 17, 0.3); }
+
+      @keyframes subtle-pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(0.96); }
+      }
+      .animate-subtle-pulse { animation: subtle-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+      input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
+      input[type="range"]::-webkit-slider-track { background: rgba(17, 17, 17, 0.08); height: 6px; border-radius: 3px; }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; appearance: none; height: 20px; width: 20px; border-radius: 50%;
+        background: #111111; border: 2px solid #FAFAFA;
+        box-shadow: 0 2px 8px rgba(17, 17, 17, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        margin-top: -7px; transition: transform 0.15s ease, background-color 0.15s ease;
+      }
+      input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); background: #000000; }
+    </style>
+  </head>
+  <body class="bg-[#FAFAFA] text-[#111111] antialiased selection:bg-[#111111] selection:text-[#FAFAFA] overflow-x-hidden font-sans">
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" data-type="module" data-presets="react">
+// ============================================================================
+// FABRIKA // SYSTEMS — single-file bundle (React + Framer Motion + Lucide)
+// ============================================================================
+import React, { useState, useEffect, useRef, StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence } from 'framer-motion';
+import * as LucideIcons from 'lucide-react';
+
+// ---------------------------------------------------------------------------
+// Sound Engine (Web Audio API soft "liquid glass" acoustic feedback)
+// ---------------------------------------------------------------------------
+class SoundEngine {
+  constructor() {
+    this.ctx = null;
+    this.enabled = false;
+  }
+
+  toggleSound(force) {
+    this.enabled = force !== undefined ? force : !this.enabled;
+    if (this.enabled && !this.ctx) this.initCtx();
+    return this.enabled;
+  }
+
+  isEnabled() {
+    return this.enabled;
+  }
+
+  initCtx() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+    } catch (e) {
+      console.warn('Web Audio API not supported', e);
+    }
+  }
+
+  ensureCtx() {
+    if (!this.ctx) this.initCtx();
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+  }
+
+  playGlassTap() {
+    if (!this.enabled) return;
+    this.ensureCtx();
+    if (!this.ctx) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.08);
+  }
+
+  playGlassChime() {
+    if (!this.enabled) return;
+    this.ensureCtx();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    const osc1 = this.ctx.createOscillator();
+    const gain1 = this.ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(1760, now);
+    gain1.gain.setValueAtTime(0.02, now);
+    gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+    osc1.connect(gain1);
+    gain1.connect(this.ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.25);
+
+    const osc2 = this.ctx.createOscillator();
+    const gain2 = this.ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(2637, now + 0.06);
+    gain2.gain.setValueAtTime(0.015, now + 0.06);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+    osc2.connect(gain2);
+    gain2.connect(this.ctx.destination);
+    osc2.start(now + 0.06);
+    osc2.stop(now + 0.35);
+  }
+
+  playGlassPulse() {
+    if (!this.enabled) return;
+    this.ensureCtx();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.12);
+    gain.gain.setValueAtTime(0.025, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  playPhoneBeep() {
+    if (!this.enabled) return;
+    this.ensureCtx();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, now);
+    gain.gain.setValueAtTime(0.02, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  }
+}
+
+const soundEngine = new SoundEngine();
+
+// ---------------------------------------------------------------------------
+// GlassIcon
+// ---------------------------------------------------------------------------
+const GlassIcon = ({ name, size = 20, className = '', containerClassName = '', onClick }) => {
+  const IconComponent = LucideIcons[name] || LucideIcons.Sparkles;
+
+  const handleClick = () => {
+    soundEngine.playGlassTap();
+    if (onClick) onClick();
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className={`glass-icon-container relative inline-flex items-center justify-center rounded-2xl p-3 transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer select-none ${containerClassName}`}
+    >
+      <IconComponent size={size} className={`text-[#111111] relative z-10 transition-colors ${className}`} />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// LiquidGlassCard
+// ---------------------------------------------------------------------------
+const LiquidGlassCard = ({ children, className = '', variant = 'light', interactive = true, onClick }) => {
+  const cardRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current || !interactive) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setMousePos({ x, y });
+  };
+
+  const getVariantClass = () => {
+    switch (variant) {
+      case 'dark':
+        return 'liquid-glass-dark';
+      case 'subtle':
+        return 'liquid-glass-subtle';
+      case 'light':
+      default:
+        return 'liquid-glass';
+    }
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative overflow-hidden rounded-3xl ${getVariantClass()} ${className}`}
+    >
+      {interactive && isHovered && (
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-300 opacity-60 z-0"
+          style={{
+            background: `radial-gradient(400px circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 255, 255, 0.45), transparent 80%)`,
+          }}
+        />
+      )}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent opacity-70 z-10" />
+      <div className="relative z-10">{children}</div>
+    </motion.div>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Header
+// ---------------------------------------------------------------------------
+const Header = ({ onOpenAudit }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleSound = () => {
+    const newState = soundEngine.toggleSound();
+    setSoundEnabled(newState);
+    if (newState) soundEngine.playGlassChime();
+  };
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 pb-2 transition-all duration-300 pointer-events-none">
+      <div
+        className={`max-w-7xl mx-auto rounded-full transition-all duration-500 pointer-events-auto px-6 py-3 flex items-center justify-between ${
+          scrolled
+            ? 'liquid-glass shadow-lg border border-black/10 backdrop-blur-2xl bg-white/80'
+            : 'bg-white/40 border border-black/5 backdrop-blur-md'
+        }`}
+      >
+        <a href="#" className="flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-xl bg-[#111111] flex items-center justify-center text-[#FAFAFA] font-mono text-xs font-bold tracking-tighter group-hover:scale-105 transition-transform shadow-md">
+            F/S
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold tracking-wider text-[#111111] font-mono uppercase">
+              FABRIKA<span className="text-[#5C5C5C] font-normal">//SYSTEMS</span>
+            </span>
+            <span className="text-[10px] text-[#5C5C5C] font-mono tracking-tight hidden sm:block">
+              ПРОИЗВОДСТВЕННЫЙ КОНВЕЙЕР ПРОДАЖ
+            </span>
+          </div>
+        </a>
+
+        <nav className="hidden md:flex items-center gap-6 text-xs font-mono tracking-wide text-[#5C5C5C]">
+          <a href="#lead-demo" onClick={() => soundEngine.playGlassTap()} className="hover:text-[#111111] transition-colors py-1 relative group">
+            01 / ЗАЯВКИ
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#111111] transition-all group-hover:w-full" />
+          </a>
+          <a href="#telephony" onClick={() => soundEngine.playGlassTap()} className="hover:text-[#111111] transition-colors py-1 relative group">
+            02 / ТЕЛЕФОНИЯ
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#111111] transition-all group-hover:w-full" />
+          </a>
+          <a href="#calculator" onClick={() => soundEngine.playGlassTap()} className="hover:text-[#111111] transition-colors py-1 relative group">
+            03 / КАЛЬКУЛЯТОР
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#111111] transition-all group-hover:w-full" />
+          </a>
+          <a href="#integrations" onClick={() => soundEngine.playGlassTap()} className="hover:text-[#111111] transition-colors py-1 relative group">
+            04 / ИНТЕГРАЦИИ
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#111111] transition-all group-hover:w-full" />
+          </a>
+          <a href="#comparison" onClick={() => soundEngine.playGlassTap()} className="hover:text-[#111111] transition-colors py-1 relative group">
+            05 / СРАВНЕНИЕ
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#111111] transition-all group-hover:w-full" />
+          </a>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleSound}
+            title={soundEnabled ? 'Звук включен' : 'Включить акустику Liquid Glass'}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono transition-all duration-300 border ${
+              soundEnabled
+                ? 'bg-[#111111] text-[#FAFAFA] border-[#111111] shadow-sm'
+                : 'bg-white/60 text-[#5C5C5C] border-black/10 hover:border-black/30 hover:text-[#111111]'
+            }`}
+          >
+            {soundEnabled ? (
+              <>
+                <LucideIcons.Volume2 size={13} className="text-[#FAFAFA] animate-pulse" />
+                <span className="hidden sm:inline">AUDIO ON</span>
+              </>
+            ) : (
+              <>
+                <LucideIcons.VolumeX size={13} className="text-[#5C5C5C]" />
+                <span className="hidden sm:inline">AUDIO OFF</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
+              soundEngine.playGlassChime();
+              onOpenAudit();
+            }}
+            className="px-4 py-2 rounded-full bg-[#111111] text-[#FAFAFA] text-xs font-mono font-medium tracking-wide hover:bg-black/80 transition-all flex items-center gap-1.5 shadow-md active:scale-95"
+          >
+            <span>АУДИТ CRM</span>
+            <LucideIcons.ArrowUpRight size={14} />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+const INITIAL_FEED_ITEMS = [
+  {
+    id: 'f-1',
+    time: '14:32:04',
+    company: 'ПАО «УралМашЗавод»',
+    action: 'Запрос КП: 1,200 шт валов из стали 40ХН',
+    value: '4,800,000 ₽',
+    status: 'Сделка создана'
+  },
+  {
+    id: 'f-2',
+    time: '14:31:40',
+    company: 'ООО «Пермский Металлопрокат»',
+    action: 'Входящий звонок: Лазерная резка 12 мм',
+    value: '1,350,000 ₽',
+    status: 'Менеджер уведомлен'
+  },
+  {
+    id: 'f-3',
+    time: '14:30:12',
+    company: 'ЗАО «ТехноПромАрматура»',
+    action: 'Квалификация: Согласованы условия ТЗ',
+    value: '8,200,000 ₽',
+    status: 'CRM обновлена'
+  }
+];
+
+const NEW_FEED_POOL = [
+  {
+    company: 'АО «СибЭнергоМаш»',
+    action: 'Заявка с сайта: Фрезеровка корпусов ЧПУ',
+    value: '2,400,000 ₽',
+    status: 'Заявка принята'
+  },
+  {
+    company: 'ООО «ВолгаСпецСталь»',
+    action: 'Звонок 24/7: Запрос сертификата ГОСТ',
+    value: '6,100,000 ₽',
+    status: 'Ответ отправлен'
+  },
+  {
+    company: 'НПО «ГидроПресс»',
+    action: 'Расчет КП: Пресс-формы для гидравлики',
+    value: '11,500,000 ₽',
+    status: 'Сделка сформирована'
+  }
+];
+
+const Hero = ({ onOpenAudit }) => {
+  const [feedItems, setFeedItems] = useState(INITIAL_FEED_ITEMS);
+  const [activeTab, setActiveTab] = useState('all');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomItem = NEW_FEED_POOL[Math.floor(Math.random() * NEW_FEED_POOL.length)];
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      const newItem = {
+        id: `f-${Date.now()}`,
+        time: timeStr,
+        company: randomItem.company,
+        action: randomItem.action,
+        value: randomItem.value,
+        status: randomItem.status
+      };
+
+      setFeedItems((prev) => [newItem, ...prev.slice(0, 4)]);
+      soundEngine.playGlassPulse();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="relative min-h-screen pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between">
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/80 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-7 space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full liquid-glass border border-black/10 text-xs font-mono text-[#5C5C5C]"
+          >
+            <span className="w-2 h-2 rounded-full bg-[#111111] animate-ping" />
+            <span className="text-[#111111] font-semibold">B2B ПРОИЗВОДСТВЕННЫЙ КОНВЕЙЕР</span>
+            <span className="text-[#5C5C5C]">|</span>
+            <span>0% ПОТЕРЯННЫХ ЛИДОВ</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#111111] leading-[1.05]"
+          >
+            Ни одного потерянного клиента. <br />
+            <span className="text-[#5C5C5C] font-normal">Идеальный порядок в CRM завода.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-lg sm:text-xl text-[#5C5C5C] font-normal max-w-2xl leading-relaxed"
+          >
+            Мы не продаём «хайповый AI». Мы строим жесткую инженерную систему обработки входящего потока: от первого звонка или письма с чертежом до моментально заполненной карточки сделки и назначенного технолога.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap items-center gap-4 pt-2"
+          >
+            <a
+              href="#lead-demo"
+              onClick={() => soundEngine.playGlassTap()}
+              className="px-8 py-4 rounded-full bg-[#111111] text-[#FAFAFA] font-mono text-sm font-semibold tracking-wide hover:bg-black/80 transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl active:scale-95 group"
+            >
+              <span>ТЕСТ ДЕМО-СТЕНДА</span>
+              <LucideIcons.ArrowDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+            </a>
+
+            <button
+              onClick={() => {
+                soundEngine.playGlassChime();
+                onOpenAudit();
+              }}
+              className="px-8 py-4 rounded-full liquid-glass border border-black/15 text-[#111111] font-mono text-sm font-semibold tracking-wide hover:bg-white transition-all flex items-center gap-2 active:scale-95"
+            >
+              <span>РАССЧИТАТЬ ОКУПАЕМОСТЬ</span>
+            </button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-black/10"
+          >
+            <div className="space-y-1">
+              <div className="text-2xl font-bold font-mono text-[#111111]">0.4 сек</div>
+              <div className="text-xs text-[#5C5C5C] font-mono">Скорость квалификации</div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl font-bold font-mono text-[#111111]">24 / 7</div>
+              <div className="text-xs text-[#5C5C5C] font-mono">Прием звонков и ТЗ</div>
+            </div>
+            <div className="space-y-1 col-span-2 sm:col-span-1">
+              <div className="text-2xl font-bold font-mono text-[#111111]">+38%</div>
+              <div className="text-xs text-[#5C5C5C] font-mono">Рост выручки отдела</div>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="lg:col-span-5">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
+          >
+            <LiquidGlassCard className="p-6 space-y-6 border border-black/10 shadow-2xl">
+              <div className="flex items-center justify-between pb-4 border-b border-black/10">
+                <div className="flex items-center gap-3">
+                  <GlassIcon name="Activity" size={18} />
+                  <div>
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
+                      LIVE CRM MONITOR
+                    </h3>
+                    <p className="text-[11px] text-[#5C5C5C] font-mono">Поток заказов в реальном времени</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#111111] animate-ping" />
+                  <span className="text-[10px] font-mono font-medium text-[#111111] bg-black/5 px-2 py-0.5 rounded-full">
+                    ОНЛАЙН
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-2xl bg-white/60 border border-black/5 space-y-1">
+                  <div className="flex items-center justify-between text-[#5C5C5C]">
+                    <span className="text-[10px] font-mono uppercase">Заявок сегодня</span>
+                    <LucideIcons.Database size={12} />
+                  </div>
+                  <div className="text-lg font-bold font-mono text-[#111111]">148 шт</div>
+                  <div className="text-[10px] font-mono text-[#5C5C5C]">100% без задержек</div>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-white/60 border border-black/5 space-y-1">
+                  <div className="flex items-center justify-between text-[#5C5C5C]">
+                    <span className="text-[10px] font-mono uppercase">В работе CRM</span>
+                    <LucideIcons.Clock size={12} />
+                  </div>
+                  <div className="text-lg font-bold font-mono text-[#111111]">42.8 млн ₽</div>
+                  <div className="text-[10px] font-mono text-[#5C5C5C]">Авто-назначение РОП</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono pt-1">
+                <button
+                  onClick={() => setActiveTab('all')}
+                  className={`px-3 py-1 rounded-full transition-all ${
+                    activeTab === 'all' ? 'bg-[#111111] text-[#FAFAFA]' : 'bg-black/5 text-[#5C5C5C] hover:text-[#111111]'
+                  }`}
+                >
+                  ВСЕ СОБЫТИЯ
+                </button>
+                <button
+                  onClick={() => setActiveTab('leads')}
+                  className={`px-3 py-1 rounded-full transition-all ${
+                    activeTab === 'leads' ? 'bg-[#111111] text-[#FAFAFA]' : 'bg-black/5 text-[#5C5C5C] hover:text-[#111111]'
+                  }`}
+                >
+                  ЗАЯВКИ
+                </button>
+              </div>
+
+              <div className="space-y-3 min-h-[220px]">
+                <AnimatePresence initial={false}>
+                  {feedItems.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: -15, height: 0 }}
+                      animate={{ opacity: 1, y: 0, height: 'auto' }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.4 }}
+                      className="p-3.5 rounded-2xl bg-white/80 border border-black/10 shadow-sm flex flex-col gap-1.5"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-[#111111]">{item.company}</span>
+                        <span className="font-mono text-[10px] text-[#5C5C5C]">{item.time}</span>
+                      </div>
+                      <div className="text-xs text-[#5C5C5C] font-mono line-clamp-1">{item.action}</div>
+                      <div className="flex items-center justify-between pt-1 border-t border-black/5 text-xs font-mono">
+                        <span className="font-bold text-[#111111]">{item.value}</span>
+                        <div className="flex items-center gap-1 text-[11px] text-[#111111] bg-black/5 px-2 py-0.5 rounded-full">
+                          <LucideIcons.CheckCircle2 size={12} />
+                          <span>{item.status}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+
+              <div className="pt-2 flex items-center justify-between text-[11px] text-[#5C5C5C] font-mono">
+                <span className="flex items-center gap-1.5">
+                  <LucideIcons.ShieldCheck size={13} className="text-[#111111]" />
+                  <span>Шифрование ГОСТ 256-bit</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <LucideIcons.Factory size={13} className="text-[#111111]" />
+                  <span>Для заводов B2B</span>
+                </span>
+              </div>
+            </LiquidGlassCard>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="pt-16 flex justify-center">
+        <a
+          href="#lead-demo"
+          onClick={() => soundEngine.playGlassTap()}
+          className="flex flex-col items-center gap-2 text-[#5C5C5C] hover:text-[#111111] transition-colors font-mono text-xs group"
+        >
+          <span>ИССЛЕДОВАТЬ ИНТЕРАКТИВНЫЙ СТЕНД</span>
+          <div className="w-8 h-8 rounded-full liquid-glass flex items-center justify-center group-hover:translate-y-1 transition-transform">
+            <LucideIcons.ArrowDown size={14} />
+          </div>
+        </a>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// LeadProcessingDemo
+// ---------------------------------------------------------------------------
+const PRESET_SCENARIOS = [
+  {
+    id: 's1',
+    title: 'Запрос на валы & шестерни',
+    companyName: 'ПАО «Волгоградский МашЗавод»',
+    industry: 'Тяжелое машиностроение',
+    userInput: 'Добрый день! Нужен расчет стоимости изготовления 3 000 валов из стали 40ХН по чертежу ВМЗ-8812. Сроки — до конца квартала. Чертежи приложим.',
+    systemResponse: 'Здравствуйте! Заявка зарегистрирована в реестре завода. Номенклатура (Сталь 40ХН, 3 000 шт) идентифицирована. Для точного калькулирования и закрепления цены уточните: потребуется ли термообработка (ТВЧ) и шлифовка? Передаем данные главному технологу.',
+    extractedDetails: {
+      nomenclature: 'Вал приводной ВМЗ-8812',
+      volume: '3 000 шт.',
+      material: 'Сталь 40ХН (ГОСТ 4543-2016)',
+      deadline: '45 рабочих дней',
+      estValue: '7 800 000 ₽',
+      assignedRole: 'Главный технолог мехобработки'
+    }
+  },
+  {
+    id: 's2',
+    title: 'Лазерная резка & гибка',
+    companyName: 'ООО «ПромКонструкция»',
+    industry: 'Металлоконструкции',
+    userInput: 'Запрос КП: лазерная резка листа 10 мм (сталь 09Г2С) — 850 м², плюс последующая гибка на ЧПУ. ИНН 7724912038.',
+    systemResponse: 'Приветствуем! Карточка ООО «ПромКонструкция» найдена в базе (ИНН 7724912038). Объем 850 м² зарезервирован на участке лазерного раскроя. В течение 10 минут вышлем вам предварительную калькуляцию с учетом текущих остатков листового проката 09Г2С.',
+    extractedDetails: {
+      nomenclature: 'Раскрой листа 10 мм + ЧПУ гибка',
+      volume: '850 м²',
+      material: 'Сталь 09Г2С',
+      deadline: '12 рабочих дней',
+      estValue: '3 450 000 ₽',
+      assignedRole: 'Руководитель B2B продаж'
+    }
+  },
+  {
+    id: 's3',
+    title: 'Изготовление пресс-форм',
+    companyName: 'НПО «ПолимерТех»',
+    industry: 'Переработка пластмасс',
+    userInput: 'Требуется изготовление 4 комплектов пресс-форм высокой точности для литья под давлением. Чертежи STEP готовы. Готовы внести аванс 50%.',
+    systemResponse: 'Здравствуйте! Заявка от НПО «ПолимерТех» получена. Формат STEP отправлен в конструкторский отдел для технологической проверки. Сделка с высоким приоритетом (авансирование 50%). Назначаем персонального инженера проекта.',
+    extractedDetails: {
+      nomenclature: 'Пресс-форма инжекционная 4-гнездная',
+      volume: '4 комплекта',
+      material: 'Инструментальная сталь Х12МФ',
+      deadline: '60 рабочих дней',
+      estValue: '14 200 000 ₽',
+      assignedRole: 'Ведущий конструктор-технолог'
+    }
+  }
+];
+
+const LeadProcessingDemo = () => {
+  const [selectedScenario, setSelectedScenario] = useState(PRESET_SCENARIOS[0]);
+  const [customText, setCustomText] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [activeStepIndex, setActiveStepIndex] = useState(-1);
+  const [hasRun, setHasRun] = useState(false);
+
+  const steps = [
+    { title: 'Получена заявка', desc: 'Входящее обращение перехвачено с каналов продаж' },
+    { title: 'Создан клиент', desc: 'Проверка ИНН, карточка B2B контрагента сформирована' },
+    { title: 'CRM обновлена', desc: 'Номенклатура, ГОСТ и объем внесены в поля сделки' },
+    { title: 'Сделка создана', desc: 'Присвоен приоритет и плановый бюджет' },
+    { title: 'Назначен менеджер', desc: 'Уведомление отправлено ответственному технологу' }
+  ];
+
+  const handleStartSimulation = (scenario) => {
+    setSelectedScenario(scenario);
+    setCustomText('');
+    runSimulation();
+  };
+
+  const handleCustomSubmit = (e) => {
+    e.preventDefault();
+    if (!customText.trim()) return;
+
+    const customScenario = {
+      id: `custom-${Date.now()}`,
+      title: 'Собственный запрос',
+      companyName: 'Завод заказчика (B2B)',
+      industry: 'Промышленное производство',
+      userInput: customText,
+      systemResponse: `Здравствуйте! Заявка обработана системой. Запрос: "${customText.slice(0, 60)}..." внесён в единый реестр. Номенклатурные позиции определены, контрагент квалифицирован.`,
+      extractedDetails: {
+        nomenclature: 'Кастомная спецификация заказа',
+        volume: 'По запросу',
+        material: 'По ТЗ заказчика',
+        deadline: 'Расчёт в течение 15 мин',
+        estValue: 'Формируется КП',
+        assignedRole: 'Ответственный менеджер B2B'
+      }
+    };
+
+    setSelectedScenario(customScenario);
+    runSimulation();
+  };
+
+  const runSimulation = () => {
+    setIsProcessing(true);
+    setHasRun(false);
+    setActiveStepIndex(-1);
+    soundEngine.playGlassTap();
+
+    setTimeout(() => {
+      setActiveStepIndex(0);
+      soundEngine.playGlassPulse();
+    }, 400);
+
+    setTimeout(() => {
+      setActiveStepIndex(1);
+      soundEngine.playGlassPulse();
+    }, 900);
+
+    setTimeout(() => {
+      setActiveStepIndex(2);
+      soundEngine.playGlassPulse();
+    }, 1400);
+
+    setTimeout(() => {
+      setActiveStepIndex(3);
+      soundEngine.playGlassPulse();
+    }, 1900);
+
+    setTimeout(() => {
+      setActiveStepIndex(4);
+      setIsProcessing(false);
+      setHasRun(true);
+      soundEngine.playGlassChime();
+    }, 2400);
+  };
+
+  return (
+    <section id="lead-demo" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+      <div className="space-y-4 mb-16">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5C5C5C] tracking-widest uppercase">
+          <GlassIcon name="Sparkles" size={16} />
+          <span>01 // АВТО-ОБРАБОТКА И КВАЛИФИКАЦИЯ ЗАЯВОК</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight max-w-4xl leading-tight">
+          От входящего письма до готовой сделки в CRM за 3 секунды.
+        </h2>
+        <p className="text-lg text-[#5C5C5C] max-w-3xl leading-relaxed">
+          Система самостоятельно распознает ГОСТы, марки стали, чертежи и номенклатуру из произвольного текста. Заполняет все поля в CRM и запрашивает недостающие данные без участия РОПа.
+        </p>
+      </div>
+
+      <div className="mb-8 space-y-3">
+        <label className="text-xs font-mono text-[#5C5C5C] uppercase tracking-wider block">
+          Выберите готовый пример промышленной заявки для теста:
+        </label>
+        <div className="flex flex-wrap gap-3">
+          {PRESET_SCENARIOS.map((sc) => (
+            <button
+              key={sc.id}
+              onClick={() => handleStartSimulation(sc)}
+              className={`px-4 py-2.5 rounded-full text-xs font-mono transition-all border flex items-center gap-2 ${
+                selectedScenario.id === sc.id
+                  ? 'bg-[#111111] text-[#FAFAFA] border-[#111111] shadow-md'
+                  : 'bg-white/70 text-[#111111] border-black/10 hover:border-black/30 hover:bg-white'
+              }`}
+            >
+              <span>{sc.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-7">
+          <LiquidGlassCard className="p-6 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-black/10">
+              <div className="flex items-center gap-3">
+                <GlassIcon name="FileText" size={18} />
+                <div>
+                  <h3 className="font-mono text-xs font-bold uppercase text-[#111111]">
+                    Входящее сообщение заказчика
+                  </h3>
+                  <p className="text-[11px] text-[#5C5C5C] font-mono">
+                    {selectedScenario.companyName} • {selectedScenario.industry}
+                  </p>
+                </div>
+              </div>
+              <span className="text-[10px] font-mono bg-black/5 px-2.5 py-1 rounded-full text-[#5C5C5C]">
+                EMAIL / MESSENGER / WEB
+              </span>
+            </div>
+
+            <div className="space-y-4 min-h-[220px]">
+              <div className="p-4 rounded-2xl bg-[#111111] text-[#FAFAFA] space-y-2 text-sm shadow-md">
+                <div className="flex items-center justify-between text-xs font-mono text-white/60">
+                  <span className="flex items-center gap-1.5">
+                    <LucideIcons.User size={13} />
+                    <span>Заказчик: {selectedScenario.companyName}</span>
+                  </span>
+                  <span>14:35:00</span>
+                </div>
+                <p className="leading-relaxed font-sans">{selectedScenario.userInput}</p>
+              </div>
+
+              {isProcessing ? (
+                <div className="p-4 rounded-2xl bg-white/80 border border-black/10 flex items-center gap-3 text-xs font-mono text-[#5C5C5C]">
+                  <LucideIcons.Loader2 size={16} className="animate-spin text-[#111111]" />
+                  <span>Система анализирует текст, выделяет ГОСТ и связывается с CRM...</span>
+                </div>
+              ) : hasRun ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-2xl bg-white/90 border border-black/10 space-y-2 text-sm text-[#111111] shadow-sm"
+                >
+                  <div className="flex items-center justify-between text-xs font-mono text-[#5C5C5C]">
+                    <span className="flex items-center gap-1.5 font-bold text-[#111111]">
+                      <LucideIcons.Sparkles size={13} />
+                      <span>Авто-ответ FABRIKA (0.4 сек):</span>
+                    </span>
+                    <span>14:35:02</span>
+                  </div>
+                  <p className="leading-relaxed font-sans text-xs sm:text-sm text-[#111111]">
+                    {selectedScenario.systemResponse}
+                  </p>
+                </motion.div>
+              ) : null}
+            </div>
+
+            <form onSubmit={handleCustomSubmit} className="pt-4 border-t border-black/10 space-y-3">
+              <label className="text-xs font-mono text-[#5C5C5C] block">
+                Или напишите свой вариант запроса на производство:
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customText}
+                  onChange={(e) => setCustomText(e.target.value)}
+                  placeholder="Например: Срочно нужен расчет 500 фланцев Ду100 Ру16 из 12Х18Н10Т..."
+                  className="flex-1 px-4 py-3 rounded-2xl bg-white/80 border border-black/15 text-xs text-[#111111] placeholder:text-[#5C5C5C]/60 focus:outline-none focus:border-[#111111] font-mono transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={isProcessing || !customText.trim()}
+                  className="px-5 py-3 rounded-2xl bg-[#111111] text-[#FAFAFA] font-mono text-xs font-semibold hover:bg-black/80 transition-all flex items-center gap-2 disabled:opacity-40"
+                >
+                  <span>Запустить</span>
+                  <LucideIcons.Send size={14} />
+                </button>
+              </div>
+            </form>
+          </LiquidGlassCard>
+        </div>
+
+        <div className="lg:col-span-5 space-y-6">
+          <LiquidGlassCard className="p-6 space-y-6 border border-black/15 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-black/10">
+              <h3 className="font-mono text-xs font-bold uppercase text-[#111111]">
+                АВТО-СТАТУСЫ В CRM (BITRIX24 / AMOCRM)
+              </h3>
+              <span className="text-[10px] font-mono text-[#5C5C5C] bg-black/5 px-2 py-0.5 rounded-full">
+                100% ЛОКАЛЬНО
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {steps.map((step, idx) => {
+                const isCompleted = activeStepIndex >= idx;
+                const isCurrent = activeStepIndex === idx;
+
+                return (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-2xl transition-all duration-300 border flex items-center justify-between ${
+                      isCompleted
+                        ? 'bg-white border-black/15 shadow-sm'
+                        : isCurrent
+                        ? 'bg-black/5 border-black/20 animate-pulse'
+                        : 'bg-transparent border-black/5 opacity-40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-colors ${
+                          isCompleted ? 'bg-[#111111] text-[#FAFAFA]' : 'bg-black/10 text-[#5C5C5C]'
+                        }`}
+                      >
+                        {isCompleted ? <LucideIcons.CheckCircle2 size={14} /> : idx + 1}
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold font-mono text-[#111111]">{step.title}</div>
+                        <div className="text-[11px] text-[#5C5C5C] font-mono">{step.desc}</div>
+                      </div>
+                    </div>
+                    {isCompleted && (
+                      <span className="text-[10px] font-mono font-semibold text-[#111111]">✓ ГОТОВО</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <AnimatePresence>
+              {activeStepIndex >= 2 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 rounded-2xl bg-[#111111] text-[#FAFAFA] space-y-3 shadow-lg"
+                >
+                  <div className="flex items-center justify-between text-xs font-mono text-white/60 pb-2 border-b border-white/10">
+                    <span>КАРТОЧКА СДЕЛКИ №{Math.floor(Math.random() * 8000 + 1000)}</span>
+                    <span className="text-[#FAFAFA] font-bold">HIGH PRIORITY</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-xs font-mono">
+                    <div>
+                      <div className="text-[10px] text-white/50">Номенклатура</div>
+                      <div className="font-semibold text-white truncate">
+                        {selectedScenario.extractedDetails.nomenclature}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-white/50">Объем / Партия</div>
+                      <div className="font-semibold text-white">{selectedScenario.extractedDetails.volume}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-white/50">Материал / ГОСТ</div>
+                      <div className="font-semibold text-white">{selectedScenario.extractedDetails.material}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-white/50">Предварит. оценка</div>
+                      <div className="font-semibold text-white">{selectedScenario.extractedDetails.estValue}</div>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-white/80">
+                    <span className="flex items-center gap-1.5">
+                      <LucideIcons.User size={12} />
+                      <span>{selectedScenario.extractedDetails.assignedRole}</span>
+                    </span>
+                    <span className="flex items-center gap-1 text-white font-bold">
+                      <LucideIcons.Clock size={12} />
+                      <span>Срок: {selectedScenario.extractedDetails.deadline}</span>
+                    </span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </LiquidGlassCard>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// TelephonyDemo
+// ---------------------------------------------------------------------------
+const CALL_DIALOGUE = [
+  {
+    time: '00:03',
+    speaker: 'ai',
+    text: 'Завод «СпецМашТехнологии», добрый день! Инженерный отдел на связи. Подскажите, какую номенклатуру или чертеж необходимо просчитать?',
+    crmEvent: 'Звонок принят 24/7 • Определение номера'
+  },
+  {
+    time: '00:11',
+    speaker: 'client',
+    text: 'Здравствуйте! Нам требуется срочное изготовление комплекта из 120 валов-шестерен m=6, z=38 из стали 40Х. Есть ли возможность отгрузить за 20 дней?',
+    crmEvent: 'Клиент создан: ООО «УралМашМонтаж» (ИНН 6671049210)'
+  },
+  {
+    time: '00:22',
+    speaker: 'ai',
+    text: 'Да, сталь 40Х есть в наличии на основном складе. Для зубофрезерной обработки m=6 требуется уточнить класс точности — 7-й по ГОСТ 1643? И нужна ли объемная калилка?',
+    crmEvent: 'Параметры ТЗ классифицированы • ГОСТ 1643-81'
+  },
+  {
+    time: '00:32',
+    speaker: 'client',
+    text: 'Да, именно 7-й класс, плюс цементация. Карточку предприятия с чертежом отправляем на ваш email.',
+    crmEvent: 'Сделка сформирована: 5,400,000 ₽'
+  },
+  {
+    time: '00:40',
+    speaker: 'ai',
+    text: 'Принято. Карточка сделки создана, предварительный расчет будет отправлен вам на почту и в WhatsApp в течение 10 минут. Старший технолог уже уведомлен.',
+    crmEvent: 'Запись & стенограмма сохранены • Менеджер уведомлен'
+  }
+];
+
+const TelephonyDemo = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentLineIndex, setCurrentLineIndex] = useState(-1);
+  const [eventsCompleted, setEventsCompleted] = useState([]);
+
+  useEffect(() => {
+    let timer;
+
+    if (isPlaying) {
+      if (currentLineIndex < CALL_DIALOGUE.length - 1) {
+        timer = setTimeout(() => {
+          const nextIndex = currentLineIndex + 1;
+          setCurrentLineIndex(nextIndex);
+
+          const currentStep = CALL_DIALOGUE[nextIndex];
+          if (currentStep.crmEvent) {
+            setEventsCompleted((prev) => [...prev, currentStep.crmEvent]);
+          }
+
+          soundEngine.playPhoneBeep();
+        }, 2200);
+      } else {
+        timer = setTimeout(() => {
+          setIsPlaying(false);
+          soundEngine.playGlassChime();
+        }, 1500);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, currentLineIndex]);
+
+  const togglePlayback = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+    } else {
+      if (currentLineIndex >= CALL_DIALOGUE.length - 1) {
+        setCurrentLineIndex(-1);
+        setEventsCompleted([]);
+      }
+      setIsPlaying(true);
+      soundEngine.playGlassTap();
+    }
+  };
+
+  const handleReset = () => {
+    setIsPlaying(false);
+    setCurrentLineIndex(-1);
+    setEventsCompleted([]);
+    soundEngine.playGlassTap();
+  };
+
+  const crmStatusChecklist = [
+    { title: 'Клиент создан', done: eventsCompleted.length >= 2 },
+    { title: 'Сделка создана', done: eventsCompleted.length >= 4 },
+    { title: 'Запись и транскрипция сохранены', done: eventsCompleted.length >= 5 },
+    { title: 'Менеджер уведомлен в Telegram', done: eventsCompleted.length >= 5 }
+  ];
+
+  return (
+    <section id="telephony" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-black/10 scroll-mt-20">
+      <div className="space-y-4 mb-16">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5C5C5C] tracking-widest uppercase">
+          <GlassIcon name="PhoneCall" size={16} />
+          <span>02 // ИНЖЕНЕРНАЯ ТЕЛЕФОНИЯ 24/7</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight max-w-4xl leading-tight">
+          Голосовой диспетчер, который знает производство лучше новичков.
+        </h2>
+        <p className="text-lg text-[#5C5C5C] max-w-3xl leading-relaxed">
+          Принимает звонки круглые сутки. Опрашивает клиентов по ГОСТам, маркам стали и техническому заданию, оцифровывает весь разговор и моментально передает карточку ведущему менеджеру.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-7">
+          <LiquidGlassCard className="p-6 sm:p-8 space-y-6 border border-black/15 shadow-2xl">
+            <div className="flex items-center justify-between pb-6 border-b border-black/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#111111] text-[#FAFAFA] flex items-center justify-center">
+                  <LucideIcons.PhoneCall size={20} />
+                </div>
+                <div>
+                  <h3 className="font-mono text-xs font-bold uppercase text-[#111111]">
+                    ГОЛОСОВОЙ ИНЖЕНЕР-ПРИЕМЩИК
+                  </h3>
+                  <p className="text-[11px] text-[#5C5C5C] font-mono">
+                    Линия 8-800 • Входящий поток B2B
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 font-mono text-xs">
+                {isPlaying ? (
+                  <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#111111] text-[#FAFAFA]">
+                    <LucideIcons.Radio size={12} className="animate-pulse" />
+                    <span>ИДЕТ РАЗГОВОР</span>
+                  </span>
+                ) : (
+                  <span className="px-3 py-1 rounded-full bg-black/5 text-[#5C5C5C]">ГОТОВ К ЗВОНКУ</span>
+                )}
+              </div>
+            </div>
+
+            <div className="py-6 px-4 rounded-2xl bg-black/[0.02] border border-black/5 flex items-center justify-center gap-1.5 h-20">
+              {Array.from({ length: 28 }).map((_, i) => {
+                const height = isPlaying ? Math.floor(Math.sin(i + currentLineIndex * 2) * 20 + 28) : 8;
+                return (
+                  <motion.div
+                    key={i}
+                    animate={{ height: `${height}px` }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className={`w-1.5 rounded-full transition-colors ${isPlaying ? 'bg-[#111111]' : 'bg-black/15'}`}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="space-y-4 min-h-[220px]">
+              {currentLineIndex < 0 ? (
+                <div className="p-8 text-center rounded-2xl bg-white/60 border border-dashed border-black/15 space-y-3">
+                  <LucideIcons.Mic size={24} className="mx-auto text-[#5C5C5C]" />
+                  <p className="text-xs font-mono text-[#5C5C5C]">
+                    Нажмите <strong className="text-[#111111]">«▶ Прослушать разговор»</strong>, чтобы оценить реальный диалог с потенциальным заказчиком завода.
+                  </p>
+                </div>
+              ) : (
+                <AnimatePresence mode="popLayout">
+                  {CALL_DIALOGUE.slice(0, currentLineIndex + 1).map((step, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`p-4 rounded-2xl text-xs sm:text-sm font-sans space-y-1 shadow-sm ${
+                        step.speaker === 'ai'
+                          ? 'bg-[#111111] text-[#FAFAFA] ml-0 mr-6'
+                          : 'bg-white text-[#111111] border border-black/10 ml-6 mr-0'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between text-[11px] font-mono opacity-60">
+                        <span>{step.speaker === 'ai' ? '🤖 Голосовой Инженер' : '👤 Покупатель (ООО)'}</span>
+                        <span>{step.time}</span>
+                      </div>
+                      <p className="leading-relaxed">{step.text}</p>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              )}
+            </div>
+
+            <div className="pt-4 border-t border-black/10 flex items-center justify-between gap-4">
+              <button
+                onClick={togglePlayback}
+                className="flex-1 py-4 rounded-2xl bg-[#111111] text-[#FAFAFA] font-mono text-xs font-semibold hover:bg-black/80 transition-all flex items-center justify-center gap-3 shadow-lg active:scale-95"
+              >
+                {isPlaying ? (
+                  <>
+                    <LucideIcons.Pause size={16} />
+                    <span>Пауза</span>
+                  </>
+                ) : (
+                  <>
+                    <LucideIcons.Play size={16} />
+                    <span>▶ Прослушать разговор</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleReset}
+                title="Сбросить запись"
+                className="p-4 rounded-2xl liquid-glass border border-black/10 text-[#111111] hover:bg-white transition-all active:scale-95"
+              >
+                <LucideIcons.RotateCcw size={16} />
+              </button>
+            </div>
+
+            <p className="text-[11px] font-mono text-[#5C5C5C] text-center pt-1">
+              * Предусмотрена возможность прямой интеграции с вашей IP-АТС (Mango, Zadarma, Asterisk, UIS) или загрузка собственного аудиоплеера.
+            </p>
+          </LiquidGlassCard>
+        </div>
+
+        <div className="lg:col-span-5 space-y-6">
+          <LiquidGlassCard className="p-6 space-y-6 border border-black/15 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-black/10">
+              <h3 className="font-mono text-xs font-bold uppercase text-[#111111]">
+                СОБЫТИЯ ЗВОНКА И CRM-СИНХРОНИЗАЦИЯ
+              </h3>
+              <span className="text-[10px] font-mono text-[#5C5C5C] bg-black/5 px-2 py-0.5 rounded-full">
+                24/7 AUTO
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {crmStatusChecklist.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3.5 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
+                    item.done
+                      ? 'bg-white border-black/15 shadow-sm text-[#111111]'
+                      : 'bg-transparent border-black/5 text-[#5C5C5C]/50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                        item.done ? 'bg-[#111111] text-[#FAFAFA]' : 'bg-black/5 text-[#5C5C5C]'
+                      }`}
+                    >
+                      <LucideIcons.CheckCircle2 size={14} />
+                    </div>
+                    <span className="text-xs font-bold font-mono">{item.title}</span>
+                  </div>
+                  {item.done && <span className="text-[10px] font-mono font-bold text-[#111111]">ВЫПОЛНЕНО</span>}
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-black/10">
+              <div className="text-[11px] font-mono text-[#5C5C5C] uppercase tracking-wider">
+                Журнал распознавания телеком:
+              </div>
+
+              <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
+                {eventsCompleted.length === 0 ? (
+                  <div className="text-xs font-mono text-[#5C5C5C] italic p-3">Ожидание начала звонка...</div>
+                ) : (
+                  eventsCompleted.map((ev, i) => (
+                    <div key={i} className="p-2.5 rounded-xl bg-white/70 border border-black/5 text-[11px] font-mono text-[#111111] flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#111111]" />
+                      <span>{ev}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </LiquidGlassCard>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// CalculatorSection
+// ---------------------------------------------------------------------------
+const CalculatorSection = ({ onOpenAudit }) => {
+  const [monthlyLeads, setMonthlyLeads] = useState(350);
+  const [processingTimeMin, setProcessingTimeMin] = useState(45);
+  const [hourlyRate, setHourlyRate] = useState(1200);
+  const [avgDealValue, setAvgDealValue] = useState(1500000);
+
+  const manualHoursMonth = Math.round((monthlyLeads * processingTimeMin) / 60);
+  const manualHoursYear = manualHoursMonth * 12;
+
+  const savedHoursMonth = Math.round(manualHoursMonth * 0.9);
+  const savedHoursYear = Math.round(manualHoursYear * 0.9);
+
+  const laborMoneySavedYear = savedHoursYear * hourlyRate;
+
+  const recoveredDealsYear = Math.round(monthlyLeads * 12 * 0.08);
+  const estimatedRevenueGainYear = recoveredDealsYear * avgDealValue;
+
+  const responseSpeedMultiplier = Math.round((processingTimeMin * 60) / 10);
+
+  const handleSliderChange = (setter, val) => {
+    setter(val);
+    soundEngine.playGlassTap();
+  };
+
+  return (
+    <section id="calculator" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-black/10 scroll-mt-20">
+      <div className="space-y-4 mb-16">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5C5C5C] tracking-widest uppercase">
+          <GlassIcon name="Calculator" size={16} />
+          <span>03 // КАЛЬКУЛЯТОР ЭКОНОМИКИ И ROI</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight max-w-4xl leading-tight">
+          Посчитайте потери вашего завода из-за ручного ввода данных.
+        </h2>
+        <p className="text-lg text-[#5C5C5C] max-w-3xl leading-relaxed">
+          Каждая минута промедления между входящим звонком и созданной сделкой в CRM снижает вероятность продажи на 15%. Узнайте точный финансовый эффект от внедрения.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-6">
+          <LiquidGlassCard className="p-6 sm:p-8 space-y-8 border border-black/15 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-black/10 font-mono text-xs">
+              <span className="font-bold uppercase text-[#111111]">ПАРАМЕТРЫ ВАШЕГО ПРЕДПРИЯТИЯ</span>
+              <span className="text-[#5C5C5C]">БЕЗ РЕГИСТРАЦИИ</span>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-[#5C5C5C]">1. Заявок и звонков в месяц:</span>
+                <span className="text-sm font-bold text-[#111111] bg-black/5 px-3 py-1 rounded-full">
+                  {monthlyLeads.toLocaleString('ru-RU')} шт / мес
+                </span>
+              </div>
+              <input
+                type="range"
+                min="50"
+                max="2500"
+                step="25"
+                value={monthlyLeads}
+                onChange={(e) => handleSliderChange(setMonthlyLeads, Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-[#5C5C5C]">
+                <span>50</span>
+                <span>1,200</span>
+                <span>2,500 шт</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-[#5C5C5C]">2. Время первого ответа менеджера:</span>
+                <span className="text-sm font-bold text-[#111111] bg-black/5 px-3 py-1 rounded-full">
+                  {processingTimeMin} минут
+                </span>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="240"
+                step="5"
+                value={processingTimeMin}
+                onChange={(e) => handleSliderChange(setProcessingTimeMin, Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-[#5C5C5C]">
+                <span>5 мин</span>
+                <span>1 час</span>
+                <span>4 часа</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-[#5C5C5C]">3. Стоимость часа специалиста:</span>
+                <span className="text-sm font-bold text-[#111111] bg-black/5 px-3 py-1 rounded-full">
+                  {hourlyRate.toLocaleString('ru-RU')} ₽ / час
+                </span>
+              </div>
+              <input
+                type="range"
+                min="500"
+                max="3000"
+                step="100"
+                value={hourlyRate}
+                onChange={(e) => handleSliderChange(setHourlyRate, Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-[#5C5C5C]">
+                <span>500 ₽</span>
+                <span>1,800 ₽</span>
+                <span>3,000 ₽</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-[#5C5C5C]">4. Средний чек сделки завода:</span>
+                <span className="text-sm font-bold text-[#111111] bg-black/5 px-3 py-1 rounded-full">
+                  {(avgDealValue / 1000000).toFixed(1)} млн ₽
+                </span>
+              </div>
+              <input
+                type="range"
+                min="200000"
+                max="10000000"
+                step="200000"
+                value={avgDealValue}
+                onChange={(e) => handleSliderChange(setAvgDealValue, Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-[#5C5C5C]">
+                <span>200 тыс ₽</span>
+                <span>5 млн ₽</span>
+                <span>10 млн ₽</span>
+              </div>
+            </div>
+          </LiquidGlassCard>
+        </div>
+
+        <div className="lg:col-span-6 space-y-6">
+          <LiquidGlassCard variant="dark" className="p-6 sm:p-8 space-y-8 border border-white/20 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 font-mono text-xs text-white/60">
+              <span>РАСЧЕТ ВЫГОДЫ FABRIKA SYSTEMS</span>
+              <span className="text-white font-bold">ЭФФЕКТ С 1 МЕСЯЦА</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pb-6 border-b border-white/10">
+              <div className="space-y-1">
+                <div className="text-xs font-mono text-white/60 flex items-center gap-1.5">
+                  <LucideIcons.Clock size={14} />
+                  <span>Сэкономлено в месяц</span>
+                </div>
+                <motion.div
+                  key={savedHoursMonth}
+                  initial={{ scale: 0.95, opacity: 0.8 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-2xl sm:text-3xl font-extrabold font-mono text-white"
+                >
+                  {savedHoursMonth.toLocaleString('ru-RU')} ч
+                </motion.div>
+                <div className="text-[11px] font-mono text-white/40">Освобожденное время технологов</div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="text-xs font-mono text-white/60 flex items-center gap-1.5">
+                  <LucideIcons.Clock size={14} />
+                  <span>Сэкономлено в год</span>
+                </div>
+                <motion.div
+                  key={savedHoursYear}
+                  initial={{ scale: 0.95, opacity: 0.8 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-2xl sm:text-3xl font-extrabold font-mono text-white"
+                >
+                  {savedHoursYear.toLocaleString('ru-RU')} ч
+                </motion.div>
+                <div className="text-[11px] font-mono text-white/40">~{(savedHoursYear / 160).toFixed(1)} ставок штата</div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-1">
+                <div className="text-xs font-mono text-white/60 flex items-center gap-1.5">
+                  <LucideIcons.TrendingUp size={14} />
+                  <span>Дополнительная сохраненная выручка в год</span>
+                </div>
+                <motion.div
+                  key={estimatedRevenueGainYear}
+                  initial={{ scale: 0.95, opacity: 0.8 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-3xl sm:text-5xl font-extrabold font-mono text-white tracking-tight"
+                >
+                  {(estimatedRevenueGainYear / 1000000).toFixed(1)} млн ₽
+                </motion.div>
+                <div className="text-xs font-mono text-white/50">
+                  За счет предотвращения отвала заказчиков к конкурентам
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10 font-mono text-xs">
+                <div>
+                  <div className="text-white/50">Прямая экономия ФОТ:</div>
+                  <div className="font-bold text-white text-base">
+                    {(laborMoneySavedYear / 1000000).toFixed(2)} млн ₽ / год
+                  </div>
+                </div>
+                <div>
+                  <div className="text-white/50">Ускорение отклика:</div>
+                  <div className="font-bold text-white text-base">в {responseSpeedMultiplier} раз быстрее</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <button
+                onClick={() => {
+                  soundEngine.playGlassChime();
+                  onOpenAudit();
+                }}
+                className="w-full py-4 rounded-2xl bg-white text-[#111111] font-mono text-xs font-bold tracking-wide hover:bg-white/90 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+              >
+                <span>ПОЛУЧИТЬ ПЕРСОНАЛЬНЫЙ РАСЧЕТ И АУДИТ</span>
+                <LucideIcons.ArrowUpRight size={16} />
+              </button>
+            </div>
+          </LiquidGlassCard>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// IntegrationsSection
+// ---------------------------------------------------------------------------
+const INTEGRATIONS_DATA = [
+  {
+    id: 'bitrix24',
+    name: 'Bitrix24 (CRM & ERP)',
+    category: 'CRM Система',
+    syncDetail: 'Авто-создание лида и сделки, квалификация по пользовательским полям (ГОСТ, Метрика, Спецификация), автоматическая постановка задач главному технологу и контроль дедлайнов.',
+    status: 'Двусторонняя синхронизация 0.2s',
+    iconName: 'Database'
+  },
+  {
+    id: 'amocrm',
+    name: 'amoCRM Enterprise',
+    category: 'Управление продажами',
+    syncDetail: 'Мгновенный перевод по этапам воронки, обогащение карточки контактов юридическими данными по ИНН, прикрепление аудиозаписи звонка и текстовой транскрипции.',
+    status: 'Нативная вебхук-интеграция',
+    iconName: 'Zap'
+  },
+  {
+    id: 'telegram',
+    name: 'Telegram Business',
+    category: 'Мессенджер / Оперативные оповещения',
+    syncDetail: 'Отправка мгновенных алертов РОПу о крупных заявках (>1 млн ₽), прямой чат с закупщиками, авто-отправка коммерческих предложений и уведомлений о статусе производства.',
+    status: 'Бот-конвейер 24/7',
+    iconName: 'Send'
+  },
+  {
+    id: 'whatsapp',
+    name: 'WhatsApp Business API',
+    category: 'Канал связи с заказчиками',
+    syncDetail: 'Официальный WABA-канал: верификация чертежей, отправка реквизитов для оплаты, автоматическое подтверждение получения аванса и информирование о готовности партии.',
+    status: 'Green Badge Verified',
+    iconName: 'MessageCircle'
+  },
+  {
+    id: 'email',
+    name: 'Корпоративная Почта (IMAP/SMTP)',
+    category: 'Прием входящих ТЗ и чертежей',
+    syncDetail: 'Парсинг вложений (PDF, STEP, DWG, DXF, XLSX), интеллектуальное распознавание заявки из тела письма, проверка спама и авто-квитование о получении за 1 секунду.',
+    status: 'Шифрование SSL/TLS',
+    iconName: 'Mail'
+  },
+  {
+    id: 'sheets',
+    name: 'Google Sheets / 1C ERP',
+    category: 'Склад & Учет номенклатуры',
+    syncDetail: 'Сверка запрашиваемых марок стали и металлопроката с актуальными складскими остатками в 1С. Автоматическое обновление сводных таблиц для коммерческого директора.',
+    status: 'Реальное время REST API',
+    iconName: 'FileSpreadsheet'
+  }
+];
+
+const IntegrationsSection = () => {
+  const [activeApp, setActiveApp] = useState(INTEGRATIONS_DATA[0]);
+
+  const handleHoverApp = (app) => {
+    setActiveApp(app);
+    soundEngine.playGlassTap();
+  };
+
+  return (
+    <section id="integrations" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-black/10 scroll-mt-20">
+      <div className="space-y-4 mb-16">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5C5C5C] tracking-widest uppercase">
+          <GlassIcon name="Layers" size={16} />
+          <span>04 // БЕСШОВНЫЙ IT-КОНТУР</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight max-w-4xl leading-tight">
+          Интегрируется в вашу CRM и АТС за 1 рабочий день.
+        </h2>
+        <p className="text-lg text-[#5C5C5C] max-w-3xl leading-relaxed">
+          Никакой сложной перестройки процессов. Система подключается поверх вашей существующей цифровой инфраструктуры и обогащает её полным контролем над входящими заказами.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {INTEGRATIONS_DATA.map((app) => {
+            const isSelected = activeApp.id === app.id;
+            return (
+              <LiquidGlassCard
+                key={app.id}
+                onClick={() => handleHoverApp(app)}
+                className={`p-5 cursor-pointer transition-all duration-300 border ${
+                  isSelected ? 'border-[#111111] bg-white shadow-xl scale-[1.02]' : 'border-black/10 hover:border-black/30'
+                }`}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <GlassIcon name={app.iconName} size={20} />
+                    <span className="text-[10px] font-mono text-[#5C5C5C] bg-black/5 px-2.5 py-1 rounded-full">
+                      {app.category}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-sm text-[#111111]">{app.name}</h3>
+                    <p className="text-xs text-[#5C5C5C] font-mono pt-1 line-clamp-2">{app.syncDetail}</p>
+                  </div>
+
+                  <div className="pt-2 border-t border-black/5 flex items-center justify-between text-[10px] font-mono text-[#111111]">
+                    <span className="flex items-center gap-1 font-semibold">
+                      <LucideIcons.CheckCircle2 size={11} />
+                      <span>{app.status}</span>
+                    </span>
+                    <LucideIcons.ArrowRight size={12} className={isSelected ? 'translate-x-1 transition-transform' : 'opacity-40'} />
+                  </div>
+                </div>
+              </LiquidGlassCard>
+            );
+          })}
+        </div>
+
+        <div className="lg:col-span-5 sticky top-28">
+          <LiquidGlassCard variant="dark" className="p-6 sm:p-8 space-y-6 border border-white/20 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 font-mono text-xs text-white/60">
+              <span className="flex items-center gap-2">
+                <LucideIcons.RefreshCw size={13} className="animate-spin text-white" />
+                <span>СПЕЦИФИКАЦИЯ СИНХРОНИЗАЦИИ</span>
+              </span>
+              <span className="text-white font-bold">{activeApp.category}</span>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeApp.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-extrabold text-white font-mono">{activeApp.name}</h3>
+                  <p className="text-xs font-mono text-white/60">{activeApp.status}</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/10 border border-white/10 space-y-2 text-xs font-mono text-white/90 leading-relaxed">
+                  <div className="text-[10px] text-white/50 uppercase tracking-wider font-bold">
+                    ЧТО ИМЕННО СИНХРОНИЗИРУЕТСЯ:
+                  </div>
+                  <p>{activeApp.syncDetail}</p>
+                </div>
+
+                <div className="space-y-2 font-mono text-xs text-white/80">
+                  <div className="flex items-center gap-2">
+                    <LucideIcons.CheckCircle2 size={14} className="text-white" />
+                    <span>Задержка обмена данными &lt; 200 мс</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <LucideIcons.CheckCircle2 size={14} className="text-white" />
+                    <span>Автоматический повтор при сбоях сети</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <LucideIcons.CheckCircle2 size={14} className="text-white" />
+                    <span>Полный журнал аудита для службы безопасности завода</span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </LiquidGlassCard>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// ComparisonSection
+// ---------------------------------------------------------------------------
+const ComparisonSection = ({ onOpenAudit }) => {
+  const comparisonRows = [
+    {
+      parameter: 'Скорость первичного ответа',
+      standard: '1,5 — 4 часа (зависит от загрузки менеджера)',
+      fabrika: '30 секунд (24 часа в сутки, 365 дней в году)'
+    },
+    {
+      parameter: 'Квалификация параметров (ГОСТ, марка)',
+      standard: 'Часто упускаются толщины, сплавы и дедлайны',
+      fabrika: '100% точность: авто-структурирование ТЗ и реквизитов'
+    },
+    {
+      parameter: 'Дисциплина внесения в CRM',
+      standard: 'До 30% звонков не фиксируются вообще',
+      fabrika: 'Запись 100% лидов, звонков и писем с привязкой к ИНН'
+    },
+    {
+      parameter: 'Работа в выходные и ночные смены',
+      standard: 'Обращения «копятся» до утра понедельника',
+      fabrika: 'Мгновенная консультация, запись в CRM, авто-КП'
+    },
+    {
+      parameter: 'Прозрачность для руководства завода',
+      standard: 'Отчеты собираются вручную в конце месяца',
+      fabrika: 'Сквозной дашборд с аналитикой воронки в реальном времени'
+    }
+  ];
+
+  return (
+    <section id="comparison" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-black/10 scroll-mt-20">
+      <div className="space-y-4 mb-16">
+        <div className="flex items-center gap-2 font-mono text-xs text-[#5C5C5C] tracking-widest uppercase">
+          <GlassIcon name="ShieldAlert" size={16} />
+          <span>05 // АНАЛИЗ ЭФФЕКТИВНОСТИ ОДО</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight max-w-4xl leading-tight">
+          Почему классический отдел продаж упускает до 35% крупных заказов.
+        </h2>
+        <p className="text-lg text-[#5C5C5C] max-w-3xl leading-relaxed">
+          Промышленные покупатели не ждут. Если главный снабженец стройки или завода не получает ответ на ТЗ в течение 10 минут, он отправляет запрос вашему прямому конкуренту.
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        {comparisonRows.map((row, idx) => (
+          <LiquidGlassCard key={idx} className="p-6 border border-black/10">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <div className="md:col-span-4 space-y-1">
+                <span className="text-[10px] font-mono text-[#5C5C5C] uppercase tracking-wider block">
+                  ПАРАМЕТР №0{idx + 1}
+                </span>
+                <h3 className="font-bold text-base text-[#111111]">{row.parameter}</h3>
+              </div>
+
+              <div className="md:col-span-4 p-4 rounded-2xl bg-black/[0.03] border border-black/5 space-y-1">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#5C5C5C]">
+                  <LucideIcons.XCircle size={14} className="text-[#5C5C5C]" />
+                  <span>ОБЫЧНЫЙ ОТДЕЛ ПРОДАЖ</span>
+                </div>
+                <p className="text-xs text-[#5C5C5C] font-mono pt-1 leading-relaxed">{row.standard}</p>
+              </div>
+
+              <div className="md:col-span-4 p-4 rounded-2xl bg-[#111111] text-[#FAFAFA] space-y-1 shadow-md">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#FAFAFA]">
+                  <LucideIcons.CheckCircle2 size={14} className="text-[#FAFAFA]" />
+                  <span>КОНВЕЙЕР FABRIKA SYSTEMS</span>
+                </div>
+                <p className="text-xs text-white/80 font-mono pt-1 leading-relaxed">{row.fabrika}</p>
+              </div>
+            </div>
+          </LiquidGlassCard>
+        ))}
+      </div>
+
+      <div className="mt-16 text-center">
+        <button
+          onClick={onOpenAudit}
+          className="px-8 py-4 rounded-full bg-[#111111] text-[#FAFAFA] font-mono text-xs font-bold tracking-wide hover:bg-black/80 transition-all inline-flex items-center gap-2 shadow-xl active:scale-95"
+        >
+          <span>ЗАПРОСИТЬ ТЕХНИЧЕСКИЙ АУДИТ ВАШЕГО ЗАВОДА</span>
+          <LucideIcons.ArrowUpRight size={16} />
+        </button>
+      </div>
+    </section>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+const Footer = ({ onOpenAudit }) => {
+  return (
+    <footer className="bg-[#111111] text-[#FAFAFA] pt-20 pb-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+      <div className="max-w-7xl mx-auto space-y-16">
+        <div className="p-8 sm:p-12 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-3">
+              <span className="text-xs font-mono text-white/50 uppercase tracking-widest block">
+                [ ГОТОВЫ ИСКЛЮЧИТЬ ПОТЕРИ КЛИЕНТОВ? ]
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Начните контролировать 100% входящих сделок уже на этой неделе.
+              </h2>
+              <p className="text-sm sm:text-base text-white/60 font-sans max-w-2xl">
+                Бесплатная демонстрация системы на ваших реальных примерах. Наш инженер подключится к звонку и покажет всю цепочку квалификации.
+              </p>
+            </div>
+
+            <div className="lg:col-span-4 flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  soundEngine.playGlassChime();
+                  onOpenAudit();
+                }}
+                className="w-full py-4 rounded-full bg-white text-[#111111] font-mono text-xs font-bold tracking-wide hover:bg-white/90 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-95"
+              >
+                <span>ЗАПРОСИТЬ ДЕМО ДЛЯ ВАШЕГО ЗАВОДА</span>
+                <LucideIcons.ArrowUpRight size={16} />
+              </button>
+              <div className="text-[11px] font-mono text-white/40 text-center flex items-center justify-center gap-2">
+                <LucideIcons.ShieldCheck size={12} className="text-white" />
+                <span>Подключение за 1 рабочий день</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 text-xs font-mono text-white/60 pt-8 border-t border-white/10">
+          <div className="md:col-span-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-white text-[#111111] flex items-center justify-center font-mono text-xs font-bold">
+                F/S
+              </div>
+              <span className="text-sm font-bold tracking-wider text-white">
+                FABRIKA<span className="text-white/40 font-normal">//SYSTEMS</span>
+              </span>
+            </div>
+            <p className="text-white/50 text-[11px] leading-relaxed max-w-sm">
+              Инженерная архитектура авто-обработки заявок и голоса для промышленных и производственных предприятий.
+            </p>
+          </div>
+
+          <div className="md:col-span-3 space-y-3">
+            <div className="text-white font-bold uppercase tracking-wider text-[11px]">УСЛУГИ</div>
+            <ul className="space-y-2 text-white/60">
+              <li>
+                <a href="#lead-demo" className="hover:text-white transition-colors">
+                  01 / Обработка & Квалификация заявок
+                </a>
+              </li>
+              <li>
+                <a href="#telephony" className="hover:text-white transition-colors">
+                  02 / Голосовая Телефония 24/7
+                </a>
+              </li>
+              <li>
+                <a href="#calculator" className="hover:text-white transition-colors">
+                  03 / Калькулятор окупаемости ROI
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-3 space-y-3">
+            <div className="text-white font-bold uppercase tracking-wider text-[11px]">БЕЗОПАСНОСТЬ</div>
+            <ul className="space-y-2 text-white/60">
+              <li className="flex items-center gap-1.5">
+                <LucideIcons.ShieldCheck size={12} className="text-white" />
+                <span>ГОСТ 256-bit Шифрование</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <LucideIcons.Factory size={12} className="text-white" />
+                <span>Локальные серверы в РФ</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <LucideIcons.Cpu size={12} className="text-white" />
+                <span>SLA 99.99% доступности</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-2 space-y-3">
+            <div className="text-white font-bold uppercase tracking-wider text-[11px]">КОНТАКТЫ</div>
+            <div className="space-y-1 text-white/60 text-[11px]">
+              <div>8 (800) 550-92-10</div>
+              <div>enterprise@fabrika.systems</div>
+              <div className="pt-2 text-white/40">Москва • Екатринбург • СПб</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-white/40 pt-8 border-t border-white/10">
+          <div>© {new Date().getFullYear()} FABRIKA SYSTEMS INC. ВСЕ ПРАВА ZАЩИЩЕНЫ.</div>
+          <div className="flex items-center gap-4">
+            <span>КОНФИДЕНЦИАЛЬНОСТЬ</span>
+            <span>СОГЛАШЕНИЕ NDA</span>
+            <span>ISO 27001 COMPLIANT</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// AuditModal
+// ---------------------------------------------------------------------------
+const AuditModal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    company: '',
+    industry: 'Металлообработка / Машиностроение'
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    soundEngine.playGlassTap();
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      soundEngine.playGlassChime();
+    }, 1200);
+  };
+
+  const handleClose = () => {
+    setIsSubmitted(false);
+    onClose();
+    soundEngine.playGlassTap();
+  };
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          className="relative w-full max-w-lg rounded-3xl liquid-glass border border-black/15 p-6 sm:p-8 shadow-2xl bg-white/90"
+        >
+          <button
+            onClick={handleClose}
+            className="absolute top-5 right-5 p-2 rounded-full hover:bg-black/5 text-[#5C5C5C] hover:text-[#111111] transition-colors"
+          >
+            <LucideIcons.X size={18} />
+          </button>
+
+          {isSubmitted ? (
+            <div className="py-8 text-center space-y-6">
+              <div className="w-16 h-16 rounded-full bg-[#111111] text-[#FAFAFA] mx-auto flex items-center justify-center shadow-lg">
+                <LucideIcons.CheckCircle2 size={32} />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-extrabold text-[#111111]">Заявка принята</h3>
+                <p className="text-sm font-mono text-[#5C5C5C]">
+                  Ведущий архитектор CRM свяжется с вами в течение 15 минут для согласования удобного времени аудита.
+                </p>
+              </div>
+              <button
+                onClick={handleClose}
+                className="px-8 py-3 rounded-full bg-[#111111] text-[#FAFAFA] font-mono text-xs font-bold hover:bg-black/80 transition-all"
+              >
+                Вернуться на сайт
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <span className="text-[10px] font-mono text-[#5C5C5C] uppercase tracking-wider block">
+                  ЭКСПЕРТНЫЙ РАСЧЕТ ДЛЯ B2B
+                </span>
+                <h3 className="text-2xl font-extrabold text-[#111111] tracking-tight">
+                  Запросить аудит отдела продаж
+                </h3>
+                <p className="text-xs text-[#5C5C5C] font-mono pt-1">
+                  Наши инженеры проанализируют текущую воронку вашего завода и составят план бесшовной интеграции.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
+                <div className="space-y-1">
+                  <label className="text-[#5C5C5C] block">Ваше имя и должность *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Алексей Громов, Коммерческий директор"
+                    className="w-full px-4 py-3 rounded-2xl bg-white border border-black/15 text-[#111111] focus:outline-none focus:border-[#111111]"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[#5C5C5C] block">Контактный телефон *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+7 (999) 000-00-00"
+                    className="w-full px-4 py-3 rounded-2xl bg-white border border-black/15 text-[#111111] focus:outline-none focus:border-[#111111]"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[#5C5C5C] block">Название завода / предприятия *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    placeholder="ООО «ПромСтальКонструкция»"
+                    className="w-full px-4 py-3 rounded-2xl bg-white border border-black/15 text-[#111111] focus:outline-none focus:border-[#111111]"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[#5C5C5C] block">Отрасль производства</label>
+                  <select
+                    value={formData.industry}
+                    onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                    className="w-full px-4 py-3 rounded-2xl bg-white border border-black/15 text-[#111111] focus:outline-none focus:border-[#111111]"
+                  >
+                    <option value="Металлообработка / Машиностроение">Металлообработка / Машиностроение</option>
+                    <option value="Производство строительных материалов">Производство строительных материалов</option>
+                    <option value="Химическая и полимерная отрасль">Химическая и полимерная отрасль</option>
+                    <option value="Приборостроение и электроника">Приборостроение и электроника</option>
+                    <option value="Другое промышленное производство">Другое промышленное производство</option>
+                  </select>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-2xl bg-[#111111] text-[#FAFAFA] font-mono text-xs font-bold tracking-wide hover:bg-black/80 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <LucideIcons.Loader2 size={16} className="animate-spin" />
+                        <span>ОТПРАВКА ДАННЫХ...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>ОТПРАВИТЬ ЗАЯВКУ НА АУДИТ</span>
+                        <LucideIcons.ArrowRight size={16} />
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2 text-[10px] text-[#5C5C5C] pt-2 justify-center">
+                  <LucideIcons.ShieldCheck size={12} className="text-[#111111]" />
+                  <span>Конфиденциальность гарантируется NDA</span>
+                </div>
+              </form>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// App
+// ---------------------------------------------------------------------------
+function App() {
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-[#FAFAFA] text-[#111111] font-sans relative selection:bg-[#111111] selection:text-[#FAFAFA]">
+      <Header onOpenAudit={() => setIsAuditModalOpen(true)} />
+
+      <main>
+        <Hero onOpenAudit={() => setIsAuditModalOpen(true)} />
+        <LeadProcessingDemo />
+        <TelephonyDemo />
+        <CalculatorSection onOpenAudit={() => setIsAuditModalOpen(true)} />
+        <IntegrationsSection />
+        <ComparisonSection onOpenAudit={() => setIsAuditModalOpen(true)} />
+      </main>
+
+      <Footer onOpenAudit={() => setIsAuditModalOpen(true)} />
+
+      <AuditModal isOpen={isAuditModalOpen} onClose={() => setIsAuditModalOpen(false)} />
+    </div>
+  );
+}
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+    </script>
+  </body>
+</html>
